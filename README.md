@@ -59,7 +59,7 @@ cd esrgan-super-resolution
 pip install -r requirements.txt
 ```
 
-**Requirements:** Python 3.10+, PyTorch 1.13+, torchvision 0.14+
+**Requirements:** Python 3.10+, PyTorch 2.0+, torchvision 0.15+
 
 ---
 
@@ -73,6 +73,13 @@ Place HR (high-resolution) images in `data/sample/` or any directory. Update `co
 data:
   hr_dir: "data/sample"  # ← path to your HR images
 ```
+
+Dataset guidance:
+
+- **Supported formats:** PNG, JPG/JPEG (also BMP/TIFF/WEBP are accepted by the loader)
+- **Recommended resolution:** use images with the shorter side **> 256 px** for stable random crops
+- **Recommended dataset size:** at least **~100 HR images** for meaningful training
+- **LR generation:** LR patches are created **on-the-fly via bicubic downsampling** from HR patches
 
 ### 2. Run Training (Debug Mode — default)
 
@@ -94,6 +101,16 @@ python -m src.train --config configs/train_config.yaml --no-debug
 | Phase 2 | GAN Fine-tuning (generator + discriminator) | L1 + VGG Perceptual + RaGAN adversarial |
 
 Checkpoints are saved to `checkpoints/` at configurable intervals.
+
+Sample training log format:
+
+```text
+[Iter 1000] L1: 0.023 | Perceptual: 0.84 | GAN: 0.12
+```
+
+Example (brief debug pretraining curve):
+
+![Training loss curve](assets/training_loss_curve.png)
 
 ---
 
@@ -159,6 +176,31 @@ tiling:
 | Perceptual | VGG19 conv5_4 feature distance (pre-activation, frozen) |
 | Adversarial | Relativistic average GAN (RaGAN) using BCEWithLogitsLoss |
 
+Perceptual loss behavior:
+
+- VGG19 ImageNet weights are **automatically downloaded by torchvision** on first use
+- Approximate download size: **~548 MB**
+- Weights are cached locally (torch cache), so subsequent runs reuse them
+
+---
+
+## Evaluation (PSNR / SSIM)
+
+You can compute full-reference metrics with `src/utils.py`:
+
+```python
+from src.utils import load_image, compute_psnr, compute_ssim
+
+sr = load_image("results/example_sr.png")      # (C,H,W), float in [0,1]
+hr = load_image("data/gt/example_hr.png")      # must match SR size
+
+psnr = compute_psnr(sr, hr, max_val=1.0)
+ssim = compute_ssim(sr, hr, max_val=1.0)
+
+print(f"PSNR: {psnr:.2f} dB")
+print(f"SSIM: {ssim:.4f}")
+```
+
 ---
 
 ## Testing
@@ -180,7 +222,15 @@ All tests run on CPU and complete in under 2 minutes.
 
 ## Example Outputs
 
-*(Add example input/output image pairs here after training)*
+Examples below were generated from a brief debug pretraining run (CPU) and then inference on held-out synthetic samples.
+
+### Standard Image (LR → SR)
+
+![Standard example comparison](assets/examples/standard_comparison.png)
+
+### Astronomy Example (LR → SR)
+
+![Astronomy example comparison](assets/examples/astronomy_comparison.png)
 
 ---
 
