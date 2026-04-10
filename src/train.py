@@ -196,18 +196,17 @@ def train_gan(
 
         # ── Discriminator update ──────────────────────────────────────────
         optimizer_d.zero_grad()
-        with torch.no_grad():
-            sr = generator(lr)
+        sr = generator(lr).detach()  # detach: no gradients needed through generator here
 
         pred_real = discriminator(hr)
-        pred_fake = discriminator(sr.detach())
+        pred_fake = discriminator(sr)
         loss_d = gan_loss_fn(pred_real, pred_fake, for_discriminator=True)
         loss_d.backward()
         optimizer_d.step()
 
         # ── Generator update ──────────────────────────────────────────────
         optimizer_g.zero_grad()
-        sr = generator(lr)
+        sr = generator(lr)  # recompute with gradient graph for G update
 
         pred_real = discriminator(hr).detach()
         pred_fake = discriminator(sr)

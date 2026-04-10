@@ -76,7 +76,7 @@ def save_image(tensor: torch.Tensor, path: str) -> None:
     if tensor.ndim == 4:
         tensor = tensor[0]
     arr = tensor_to_numpy(tensor)
-    img = Image.fromarray(arr.astype(np.uint8))
+    img = Image.fromarray(arr)
     img.save(path)
 
 

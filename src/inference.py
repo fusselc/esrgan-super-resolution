@@ -78,6 +78,10 @@ def tiled_upscale(
     weight_map = torch.zeros(1, sr_h, sr_w, dtype=torch.float32)
 
     stride = tile_size - tile_overlap
+    if tile_overlap >= tile_size:
+        raise ValueError(
+            f"tile_overlap ({tile_overlap}) must be less than tile_size ({tile_size})"
+        )
     if stride <= 0:
         stride = 1
 
