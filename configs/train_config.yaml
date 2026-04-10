@@ -1,0 +1,51 @@
+# ESRGAN Training Configuration
+
+# ─── Dataset ──────────────────────────────────────────────────────────────────
+data:
+  hr_dir: "data/sample"         # Path to HR training images
+  hr_crop_size: 128             # HR patch size (LR = hr_crop_size / scale)
+  scale: 4                      # Upscaling factor
+  augment: true
+
+# ─── Dataloader ──────────────────────────────────────────────────────────────
+dataloader:
+  batch_size: 4
+  num_workers: 2
+  shuffle: true
+
+# ─── Model ────────────────────────────────────────────────────────────────────
+model:
+  in_nc: 3
+  out_nc: 3
+  nf: 64                        # Base number of feature channels
+  nb: 23                        # Number of RRDB blocks
+  gc: 32                        # Growth channels per dense layer
+  scale: 4
+
+# ─── Optimizer ────────────────────────────────────────────────────────────────
+optimizer:
+  lr_g: 0.0002                  # Generator learning rate
+  lr_d: 0.0002                  # Discriminator learning rate
+  beta1: 0.9
+  beta2: 0.99
+
+# ─── Loss Weights ─────────────────────────────────────────────────────────────
+loss:
+  l1_weight: 1.0                # Pixel L1 loss weight
+  perceptual_weight: 1.0        # VGG perceptual loss weight
+  gan_weight: 0.005             # GAN (adversarial) loss weight
+
+# ─── Training Phases ──────────────────────────────────────────────────────────
+training:
+  psnr_iters: 25000             # Phase 1: PSNR-oriented pretraining iterations
+  gan_iters: 50000              # Phase 2: GAN fine-tuning iterations
+  checkpoint_interval: 5000     # Save checkpoint every N iterations
+  log_interval: 100             # Print log every N iterations
+  checkpoint_dir: "checkpoints"
+
+# ─── Debug Mode ───────────────────────────────────────────────────────────────
+debug:
+  enabled: true                 # Enable debug mode (short run for testing)
+  psnr_iters: 2000              # Debug PSNR phase iterations
+  gan_iters: 2000               # Debug GAN phase iterations
+  checkpoint_interval: 500
