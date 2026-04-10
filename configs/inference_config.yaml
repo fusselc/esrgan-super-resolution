@@ -1,0 +1,22 @@
+# ESRGAN Inference Configuration
+
+# ─── Model ────────────────────────────────────────────────────────────────────
+model:
+  in_nc: 3
+  out_nc: 3
+  nf: 64
+  nb: 23
+  gc: 32
+  scale: 4
+  checkpoint: ""                # Path to model checkpoint (.pth file); empty = random weights
+
+# ─── Input/Output ─────────────────────────────────────────────────────────────
+io:
+  input: ""                     # Path to input image or directory
+  output: "results"             # Output directory
+
+# ─── Tiled Inference ──────────────────────────────────────────────────────────
+tiling:
+  enabled: true
+  tile_size: 128                # Tile size in LR space (pixels)
+  tile_overlap: 16              # Overlap between tiles (pixels) to avoid seams
