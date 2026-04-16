@@ -1,6 +1,29 @@
 # esrgan-super-resolution
 
+[![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![PyTorch](https://img.shields.io/badge/PyTorch-2.x-EE4C2C?logo=pytorch&logoColor=white)](https://pytorch.org/)
+[![CI](https://github.com/fusselc/esrgan-super-resolution/actions/workflows/ci.yml/badge.svg)](https://github.com/fusselc/esrgan-super-resolution/actions/workflows/ci.yml)
+[![Hugging Face](https://img.shields.io/badge/Hugging%20Face-Coming%20Soon-FFD21E?logo=huggingface&logoColor=black)](https://huggingface.co/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
 **Educational PyTorch reimplementation of ESRGAN** — a modular, config-driven super-resolution pipeline featuring perceptual + adversarial losses and tiled inference. Designed for real-world super-resolution tasks including astronomical imagery and historical photo restoration.
+
+---
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Repository Structure](#repository-structure)
+- [Setup](#setup)
+- [Training](#training)
+- [Inference](#inference)
+- [Architecture Details](#architecture-details)
+- [Testing](#testing)
+- [Notebooks](#notebooks)
+- [Results](#results)
+- [Limitations](#limitations)
+- [References](#references)
+- [License](#license)
 
 ---
 
@@ -178,9 +201,25 @@ All tests run on CPU and complete in under 2 minutes.
 
 ---
 
-## Example Outputs
+## Results
 
-*(Add example input/output image pairs here after training)*
+### Before/After Gallery
+
+| Input (Low-Resolution) | Output (ESRGAN 4×) |
+|------------------------|--------------------|
+| ![Example 1 - Before](docs/results/example1_before.png) | ![Example 1 - After](docs/results/example1_after.png) |
+| ![Example 2 - Before](docs/results/example2_before.png) | ![Example 2 - After](docs/results/example2_after.png) |
+| ![Astronomy - Before](docs/results/astronomy_before.png) | ![Astronomy - After](docs/results/astronomy_after.png) |
+
+### Quantitative Metrics
+
+| Dataset / Example | PSNR (dB) ↑ | SSIM ↑ | LPIPS ↓ |
+|-------------------|-------------|--------|---------|
+| Set5 | TBD | TBD | TBD |
+| Set14 | TBD | TBD | TBD |
+| BSD100 | TBD | TBD | TBD |
+| Astronomy Example 1 | TBD | TBD | TBD |
+| Astronomy Example 2 | TBD | TBD | TBD |
 
 ---
 
