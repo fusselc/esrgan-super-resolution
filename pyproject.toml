@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "esrgan-super-resolution"
+dynamic = ["version", "dependencies"]
+description = "Educational PyTorch ESRGAN super-resolution pipeline"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [
+  {name = "fusselc"}
+]
+
+[project.scripts]
+esrgan-superres = "esrgan_super_resolution.inference:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["esrgan_super_resolution*"]
+
+[tool.setuptools.dynamic]
+version = {attr = "esrgan_super_resolution.__version__"}
+dependencies = {file = ["requirements.txt"]}

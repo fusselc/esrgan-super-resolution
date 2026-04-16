@@ -22,14 +22,15 @@ This repository is an educational, research-grade baseline suitable for extensio
 ```
 esrgan-super-resolution/
 ├── src/
-│   ├── __init__.py
-│   ├── rrdb_net.py       # RRDB Generator (23 blocks, 64ch, nearest-neighbor upsampling)
-│   ├── discriminator.py  # VGG-style Discriminator (no BN, scalar output)
-│   ├── losses.py         # L1, VGG Perceptual, RaGAN Adversarial losses
-│   ├── dataset.py        # HR→LR bicubic downsampling + augmentation dataset
-│   ├── train.py          # Two-phase training script
-│   ├── inference.py      # Tiled inference + batch processing
-│   └── utils.py          # PSNR, SSIM, image I/O, tensor↔numpy utilities
+│   └── esrgan_super_resolution/
+│       ├── __init__.py
+│       ├── rrdb_net.py       # RRDB Generator (23 blocks, 64ch, nearest-neighbor upsampling)
+│       ├── discriminator.py  # VGG-style Discriminator (no BN, scalar output)
+│       ├── losses.py         # L1, VGG Perceptual, RaGAN Adversarial losses
+│       ├── dataset.py        # HR→LR bicubic downsampling + augmentation dataset
+│       ├── train.py          # Two-phase training script
+│       ├── inference.py      # Tiled inference + batch processing
+│       └── utils.py          # PSNR, SSIM, image I/O, tensor↔numpy utilities
 ├── configs/
 │   ├── train_config.yaml
 │   └── inference_config.yaml
@@ -56,6 +57,18 @@ esrgan-super-resolution/
 ```bash
 git clone https://github.com/fusselc/esrgan-super-resolution.git
 cd esrgan-super-resolution
+pip install -e .
+```
+
+Or install directly from Git:
+
+```bash
+pip install "git+https://github.com/fusselc/esrgan-super-resolution.git"
+```
+
+Fallback (without package install):
+
+```bash
 pip install -r requirements.txt
 ```
 
@@ -77,13 +90,13 @@ data:
 ### 2. Run Training (Debug Mode — default)
 
 ```bash
-python -m src.train --config configs/train_config.yaml
+python -m esrgan_super_resolution.train --config configs/train_config.yaml
 ```
 
 Debug mode runs ~2,000 iterations per phase on CPU for quick validation. To run the full training:
 
 ```bash
-python -m src.train --config configs/train_config.yaml --no-debug
+python -m esrgan_super_resolution.train --config configs/train_config.yaml --no-debug
 ```
 
 ### Two-Phase Training
@@ -102,7 +115,17 @@ Checkpoints are saved to `checkpoints/` at configurable intervals.
 ### Single Image
 
 ```bash
-python -m src.inference \
+python -m esrgan_super_resolution.inference \
+  --config configs/inference_config.yaml \
+  --input path/to/low_res.jpg \
+  --output results/ \
+  --checkpoint checkpoints/final.pth
+```
+
+or via CLI:
+
+```bash
+esrgan-superres \
   --config configs/inference_config.yaml \
   --input path/to/low_res.jpg \
   --output results/ \
@@ -112,7 +135,7 @@ python -m src.inference \
 ### Batch Processing (Directory)
 
 ```bash
-python -m src.inference \
+python -m esrgan_super_resolution.inference \
   --config configs/inference_config.yaml \
   --input path/to/lr_images/ \
   --output results/ \
