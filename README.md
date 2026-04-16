@@ -1,5 +1,11 @@
 # esrgan-super-resolution
 
+[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue?logo=python)](https://www.python.org/)
+[![PyTorch](https://img.shields.io/badge/PyTorch-1.13%2B-ee4c2c?logo=pytorch)](https://pytorch.org/)
+[![CI](https://github.com/fusselc/esrgan-super-resolution/actions/workflows/ci.yml/badge.svg)](https://github.com/fusselc/esrgan-super-resolution/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Model%20coming%20soon-yellow)](https://huggingface.co/)
+
 **Educational PyTorch reimplementation of ESRGAN** — a modular, config-driven super-resolution pipeline featuring perceptual + adversarial losses and tiled inference. Designed for real-world super-resolution tasks including astronomical imagery and historical photo restoration.
 
 ---
@@ -178,9 +184,42 @@ All tests run on CPU and complete in under 2 minutes.
 
 ---
 
+## Results
+
+> **4× super-resolution on astronomical and historical images** — trained
+> with a quick demo run (500 PSNR + 300 GAN iterations), showcasing the ESRGAN pipeline.
+
+Run the demo pipeline to regenerate these results:
+
+```bash
+python scripts/train_quick_demo.py && python scripts/generate_results_gallery.py
+```
+
+| Image | PSNR (dB) | SSIM | LPIPS ↓ |
+|-------|-----------|------|---------|
+| sample_01 | — | — | — |
+| sample_02 | — | — | — |
+| sample_03 | — | — | — |
+| sample_04 | — | — | — |
+
+> _Metrics are computed against the bicubic-downsampled LR→HR round-trip.
+> After running the pipeline the table above is replaced by
+> `results/gallery_readme.md` with real numbers._
+
+### Before / After Gallery
+
+<img src="results/gallery/sample_01_comparison.png" alt="sample_01 — LR vs ESRGAN SR" width="100%">
+<img src="results/gallery/sample_02_comparison.png" alt="sample_02 — LR vs ESRGAN SR" width="100%">
+<img src="results/gallery/sample_03_comparison.png" alt="sample_03 — LR vs ESRGAN SR" width="100%">
+<img src="results/gallery/sample_04_comparison.png" alt="sample_04 — LR vs ESRGAN SR" width="100%">
+
+> _After running the pipeline, composite PNG files are written to `results/gallery/`._
+
+---
+
 ## Example Outputs
 
-*(Add example input/output image pairs here after training)*
+*(Run the demo pipeline to generate real Before/After composites in `results/gallery/`.)*
 
 ---
 
