@@ -1,7 +1,7 @@
 # esrgan-super-resolution
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue?logo=python)](https://www.python.org/)
-[![PyTorch](https://img.shields.io/badge/PyTorch-2.0%2B-ee4c2c?logo=pytorch)](https://pytorch.org/)
+[![PyTorch](https://img.shields.io/badge/PyTorch-1.13%2B-ee4c2c?logo=pytorch)](https://pytorch.org/)
 [![CI](https://github.com/fusselc/esrgan-super-resolution/actions/workflows/ci.yml/badge.svg)](https://github.com/fusselc/esrgan-super-resolution/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Model%20coming%20soon-yellow)](https://huggingface.co/)
@@ -186,8 +186,8 @@ All tests run on CPU and complete in under 2 minutes.
 
 ## Results
 
-> **4× super-resolution on astronomical and historical images** — trained in minutes on CPU,
-> demonstrating the full ESRGAN pipeline end-to-end.
+> **4× super-resolution on astronomical and historical images** — trained
+> with a quick demo run (500 PSNR + 300 GAN iterations), showcasing the ESRGAN pipeline.
 
 Run the demo pipeline to regenerate these results:
 

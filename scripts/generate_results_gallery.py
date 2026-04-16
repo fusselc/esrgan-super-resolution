@@ -192,14 +192,33 @@ def _make_lr_from_hr(hr_tensor: torch.Tensor, scale: int) -> torch.Tensor:
     return lr
 
 
+_FONT_SEARCH_PATHS = [
+    # Linux
+    "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+    "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf",
+    # macOS
+    "/Library/Fonts/Arial Bold.ttf",
+    "/System/Library/Fonts/Helvetica.ttc",
+    # Windows
+    "C:/Windows/Fonts/arialbd.ttf",
+    "C:/Windows/Fonts/arial.ttf",
+]
+
+
+def _load_font(font_size: int) -> ImageFont.ImageFont:
+    """Return the first available TrueType font, or Pillow's built-in default."""
+    for path in _FONT_SEARCH_PATHS:
+        try:
+            return ImageFont.truetype(path, font_size)
+        except (OSError, IOError):
+            continue
+    return ImageFont.load_default()
+
+
 def _add_label(img: Image.Image, text: str, font_size: int = 20) -> Image.Image:
     """Overlay a text label at the bottom-left of a PIL image."""
     draw = ImageDraw.Draw(img)
-    # Use a basic font (no external font file required)
-    try:
-        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", font_size)
-    except (OSError, IOError):
-        font = ImageFont.load_default()
+    font = _load_font(font_size)
 
     margin = 6
     x, y = margin, img.height - font_size - margin * 2
@@ -295,7 +314,7 @@ def _generate_markdown(rows: list, gallery_dir_rel: str) -> str:
         "## Results",
         "",
         "> **4× super-resolution on astronomical and historical images** — "
-        "trained in minutes on a CPU, showcasing the ESRGAN pipeline.",
+        "trained with a quick demo run (500 PSNR + 300 GAN iterations), showcasing the ESRGAN pipeline.",
         "",
         "| Image | PSNR (dB) | SSIM | LPIPS ↓ |",
         "|-------|-----------|------|---------|",
