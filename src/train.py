@@ -27,23 +27,17 @@ from torch.utils.data import DataLoader
 from .dataset import SRDataset
 from .discriminator import Discriminator
 from .losses import GANLoss, L1Loss, PerceptualLoss
-from .rrdb_net import RRDBNet
+from .model_registry import create_model
+from .models.init import register_models
 
 
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
 
-def build_generator(cfg: dict) -> RRDBNet:
-    m = cfg["model"]
-    return RRDBNet(
-        in_nc=m["in_nc"],
-        out_nc=m["out_nc"],
-        nf=m["nf"],
-        nb=m["nb"],
-        gc=m["gc"],
-        scale=m["scale"],
-    )
+def build_generator(cfg: dict):
+    register_models()
+    return create_model(cfg["model"])
 
 
 def build_discriminator() -> Discriminator:
@@ -52,7 +46,7 @@ def build_discriminator() -> Discriminator:
 
 def save_checkpoint(
     path: str,
-    generator: RRDBNet,
+    generator: torch.nn.Module,
     discriminator: Discriminator,
     optimizer_g: optim.Optimizer,
     optimizer_d: optim.Optimizer,
@@ -73,7 +67,7 @@ def save_checkpoint(
 
 def load_checkpoint(
     path: str,
-    generator: RRDBNet,
+    generator: torch.nn.Module,
     discriminator: Discriminator,
     optimizer_g: optim.Optimizer,
     optimizer_d: optim.Optimizer,
@@ -112,7 +106,7 @@ def make_dataloader(cfg: dict) -> DataLoader:
 
 def train_psnr(
     cfg: dict,
-    generator: RRDBNet,
+    generator: torch.nn.Module,
     optimizer_g: optim.Optimizer,
     dataloader: DataLoader,
     device: torch.device,
@@ -158,7 +152,7 @@ def train_psnr(
 
 def train_gan(
     cfg: dict,
-    generator: RRDBNet,
+    generator: torch.nn.Module,
     discriminator: Discriminator,
     optimizer_g: optim.Optimizer,
     optimizer_d: optim.Optimizer,
