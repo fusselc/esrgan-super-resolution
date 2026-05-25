@@ -16,7 +16,8 @@ from typing import Optional
 import torch
 import yaml
 
-from .rrdb_net import RRDBNet
+from .model_registry import create_model
+from .models.init import register_models
 from .utils import load_image, save_image, tensor_to_numpy
 
 SUPPORTED_EXTENSIONS = {".jpg", ".jpeg", ".png", ".bmp", ".tiff", ".tif", ".webp"}
@@ -145,17 +146,11 @@ def _build_blend_weight(h: int, w: int, overlap_sr: int) -> torch.Tensor:
 # High-level API
 # ---------------------------------------------------------------------------
 
-def build_model(cfg: dict, device: torch.device) -> RRDBNet:
+def build_model(cfg: dict, device: torch.device) -> torch.nn.Module:
     """Build and load the generator model from a config dict."""
+    register_models()
     model_cfg = cfg["model"]
-    model = RRDBNet(
-        in_nc=model_cfg["in_nc"],
-        out_nc=model_cfg["out_nc"],
-        nf=model_cfg["nf"],
-        nb=model_cfg["nb"],
-        gc=model_cfg["gc"],
-        scale=model_cfg["scale"],
-    ).to(device)
+    model = create_model(model_cfg).to(device)
     model.eval()
 
     checkpoint_path = model_cfg.get("checkpoint", "")
@@ -171,7 +166,7 @@ def build_model(cfg: dict, device: torch.device) -> RRDBNet:
 
 
 def run_inference(
-    model: RRDBNet,
+    model: torch.nn.Module,
     lr_img: torch.Tensor,
     cfg: dict,
     device: torch.device,
@@ -203,7 +198,7 @@ def run_inference(
 
 
 def process_image(
-    model: RRDBNet,
+    model: torch.nn.Module,
     input_path: str,
     output_path: str,
     cfg: dict,
@@ -218,7 +213,7 @@ def process_image(
 
 
 def process_directory(
-    model: RRDBNet,
+    model: torch.nn.Module,
     input_dir: str,
     output_dir: str,
     cfg: dict,
